@@ -4,9 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev": "tsx --watch src/index.ts"
   },
   "devDependencies": {
-    "tsx": "^4.19.2"
+    "@types/koa__router": "^12.0.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.744.0",
+    "@aws-sdk/lib-dynamodb": "^3.744.0",
+    "@aws-sdk/util-dynamodb": "^3.744.0",
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^13.1.0",
+    "dotenv-safe": "^9.1.0",
+    "koa": "^2.15.3",
+    "koa-bodyparser": "^4.4.1"
   }
 }
