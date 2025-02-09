@@ -1,6 +1,6 @@
 import { createServer } from 'http'
 import { config } from './config';
-import app from './handler';
+import app from './handler'
 
   ;
 (async () => {

@@ -70,7 +70,7 @@ router.post('/users', async (ctx) => {
   } catch (error) {
     console.error(error);
     ctx.status = 500;
-    ctx.body = { error: "Could not create user" };
+    ctx.body = { error: "error to creating user" };
   }
 });
 
