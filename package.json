@@ -1,0 +1,12 @@
+{
+  "name": "distopia-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
