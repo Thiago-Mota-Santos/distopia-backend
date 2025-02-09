@@ -47,7 +47,7 @@ router.post('/users', async (ctx) => {
 
   if (typeof userId !== 'string') {
     ctx.status = 400;
-    ctx.body = { error: '"userId" must be a string' };
+    ctx.body = { error: 'userId must be a string' };
     return;
   }
 
