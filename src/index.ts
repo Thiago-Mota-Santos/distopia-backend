@@ -1,9 +1,8 @@
 import { createServer } from 'http'
-import app from './app'
 import { config } from './config';
+import app from './handler'
 
-  ;
-(async () => {
+;(async () => {
   const server = createServer(app.callback())
 
   server.listen(Number(config.PORT), '0.0.0.0', () => {

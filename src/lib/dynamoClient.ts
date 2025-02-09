@@ -5,11 +5,11 @@ const REGION = "us-east-1";
 
 const client = new DynamoDBClient({
   region: REGION,
-  endpoint: "http://localhost:5666",
-  // credentials: {
-  //   accessKeyId: "fake",
-  //   secretAccessKey: "fake"
-  // }
+  endpoint: "http://localhost:8080",
+  credentials: {
+    accessKeyId: "dummy", 
+    secretAccessKey: "dummy",
+  },
 });
 
 const dynamoClient = DynamoDBDocumentClient.from(client);
