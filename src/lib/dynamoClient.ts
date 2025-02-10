@@ -7,8 +7,8 @@ const client = new DynamoDBClient({
   region: REGION,
   endpoint: "http://localhost:8080",
   credentials: {
-    accessKeyId: "dummy", 
-    secretAccessKey: "dummy",
+    accessKeyId: "AKIA3M7ACNTRVPCKCASM", 
+    secretAccessKey: "gMkG9vJofYYxcMUu78r8FpBbqyX5JXKbrBCtRWMD",
   },
 });
 

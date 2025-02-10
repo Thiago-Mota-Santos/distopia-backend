@@ -58,7 +58,7 @@ router.post('/users', async (ctx) => {
   }
 
   const params = {
-    TableName: 'UserTableTest',,
+    TableName: 'UserTableTest',
     Item: { userId, name },
   };
 
