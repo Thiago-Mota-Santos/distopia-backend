@@ -11,6 +11,7 @@ import cors from '@koa/cors';
 import { highlightsHandlerPost } from './handlers/highlights/highlights-handler';
 import { highlightsHandlerGet } from './handlers/highlights/highligths-handler-get';
 import { highlightsHandlerGetAll } from './handlers/highlights/highlights-handler-getAll';
+import { recentVideosHandlers } from './handlers/recent-videos/recent-videos-handler';
 
 const app = new Koa();
 const router = new Router();
@@ -22,9 +23,13 @@ const docClient = DynamoDBDocumentClient.from(client);
 app.use(cors());
 app.use(bodyParser());
 
+// highlights
 router.post('/highlight', highlightsHandlerPost)
 router.get('/highlight/:id', highlightsHandlerGet)
 router.get('/highlight', highlightsHandlerGetAll)
+
+// recent videos
+router.get('/recent-videos', recentVideosHandlers)
 
 app.use(router.routes());
 app.use(router.allowedMethods());

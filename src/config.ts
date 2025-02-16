@@ -15,4 +15,5 @@ export const config = {
   NODE_ENV: process.env.NODE_ENV,
   AWS_KEY: process.env.AWS_KEY,
   AWS_SECRET: process.env.AWS_SECRET,
+  YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
 }
