@@ -7,9 +7,10 @@ async function createHighlightsTable() {
   const params = {
     TableName: "Highlights",
     KeySchema: [
-      { AttributeName: "name", KeyType: "HASH" }
+      { AttributeName: "id", KeyType: "HASH" }, 
     ],
     AttributeDefinitions: [
+      { AttributeName: "id", AttributeType: "S" },  
       { AttributeName: "name", AttributeType: "S" }
     ],
     ProvisionedThroughput: {
