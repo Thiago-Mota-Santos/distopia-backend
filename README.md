@@ -29,3 +29,28 @@ Adiciona um novo destaque ao sistema.
 - `400 Bad Request` - Erro na requisição (parâmetros inválidos).
 - `500 Internal Server Error` - Erro inesperado no servidor.
 
+---
+
+### Obter Destaque
+
+**Rota:** `GET /highlight/:id`
+
+**Descrição:**
+Busca um destaque específico pelo ID.
+
+**Parâmetros:**
+
+- `id` (string, obrigatório, na URL): Identificador único do destaque.
+
+**Exemplo de Requisição:**
+
+```
+GET /highlight/123e4567-e89b-12d3-a456-426614174000
+```
+
+**Respostas:**
+
+- `200 OK` - Retorna os detalhes do destaque.
+- `404 Not Found` - Destaque não encontrado.
+- `500 Internal Server Error` - Erro inesperado no servidor.
+
