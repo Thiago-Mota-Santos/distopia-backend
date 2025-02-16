@@ -1,5 +1,16 @@
 # Distopia Server API
 
+how to run
+
+copy .env.example to .env
+
+run
+
+```sh
+pnpm dev
+```
+
+
 ## Endpoints
 
 ### Criar Destaque
