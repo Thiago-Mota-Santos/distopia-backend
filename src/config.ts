@@ -16,4 +16,6 @@ export const config = {
   AWS_KEY: process.env.AWS_KEY,
   AWS_SECRET: process.env.AWS_SECRET,
   YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
-}
+  X_BEARER_TOKEN: process.env.X_BEARER_TOKEN,
+  IFRAMELY_API_KEY: process.env.IFRAMELY_API_KEY,
+};
