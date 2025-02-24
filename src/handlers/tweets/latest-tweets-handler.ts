@@ -2,25 +2,40 @@ import { Context } from "koa";
 import { config } from "../../config";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { dynamoClient } from "../../lib/dynamoClient";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
+import getAllFromTable from "../../utils/getAllfromTable";
 
 const client = dynamoClient
 
 export const latestTweetsHandler = async (ctx: Context): Promise<void> => {
-  const { Items } = await client.send(new ScanCommand({ TableName: "CachedTweets", }));
+  try {
+    const cachedTweets = await getAllFromTable<LatestTweet>("CachedTweets");
+    if(cachedTweets.length > 0) return okBody(ctx, cachedTweets);
 
-  if(Items && Items.length > 0) {
-    ctx.status = 200;
-    ctx.body = {
-      tweets: Items.map((item) => unmarshall(item))
-        .sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime())
-    };
-    return;
+    const latestTweets: TwitterApiData[] = (await getLatestTweetsFromX()).data;
+    const persistedTweets = await getAllFromTable<LatestTweet>("EmbeddedTweets");
+
+    const notEmbeddedTweets = latestTweets.filter(i => !persistedTweets.find(p => p.id === i.id))
+    const embeddedTweets = await getEmbeddedTweetsFromIframely(notEmbeddedTweets);
+    if(embeddedTweets.length > 0) insertAllTweetsInPersistedTable(embeddedTweets);
+
+    const tweets: LatestTweet[] = latestTweets
+      .map(tweet =>  persistedTweets.find(p => p.id === tweet.id) ?? embeddedTweets.find(e => e.id === tweet.id))
+      .filter(t => t !== undefined);
+
+    insertAllTweetsInCacheTable(tweets);
+
+    return okBody(ctx, tweets);
+  } catch (err) {
+    console.error(err);
+    ctx.status = 500;
+    ctx.body = { message: "Internal Server Error" };
   }
+};
 
-  let tweets: LatestTweet[] = [];
-  const promises = (await getLatestTweetsFromX()).data.map(async (tweet) => {
+async function getEmbeddedTweetsFromIframely(latestTweets: TwitterApiData[]): Promise<LatestTweet[]> {
+  const tweets: LatestTweet[] = [];
+  const promises = latestTweets.map(async (tweet) => {
     const params = new URLSearchParams({
       url: encodeURI(`https://x.com/Distopialel/status/${tweet.id}`),
       api_key: config.IFRAMELY_API_KEY!,
@@ -38,16 +53,20 @@ export const latestTweetsHandler = async (ctx: Context): Promise<void> => {
         tweets.push({ id: tweet.id, blockquote, created_date: tweet.created_at });
       })
       .catch((err) => console.error(err));
-  });
+    });
 
   await Promise.all(promises);
-  insertAllTweetsInCacheTable(tweets);
+  return tweets;
+}
 
-  tweets = tweets
-    .sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime());
+function okBody(ctx: Context, tweets: LatestTweet[]) {
   ctx.status = 200;
-  ctx.body = { tweets };
-};
+  ctx.body = {
+    tweets: tweets
+      .sort((a, b) => new Date(b.created_date).getTime() - new Date(a.created_date).getTime())
+  };
+  return;
+}
 
 async function getLatestTweetsFromX(): Promise<TwitterApiResponse> {
   const userId = "1658546449674559489";
@@ -65,6 +84,16 @@ async function getLatestTweetsFromX(): Promise<TwitterApiResponse> {
       console.error(err);
       return { data: [] };
     });
+}
+
+function insertAllTweetsInPersistedTable(tweets: LatestTweet[]) {
+  const params = {
+    RequestItems: {
+      EmbeddedTweets: tweets.map(Item => ({ PutRequest: { Item } }))
+    }
+  };
+  client.send(new BatchWriteCommand(params));
+  console.log("Embedded tweets atualizado");
 }
 
 function insertAllTweetsInCacheTable(tweets: LatestTweet[]) {
