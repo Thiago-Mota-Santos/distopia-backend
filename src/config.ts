@@ -18,4 +18,6 @@ export const config = {
   YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
   X_BEARER_TOKEN: process.env.X_BEARER_TOKEN,
   IFRAMELY_API_KEY: process.env.IFRAMELY_API_KEY,
+  TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID,
+  TWITCH_CLIENT_SECRET: process.env.TWITCH_CLIENT_SECRET,
 };
